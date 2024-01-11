@@ -2,7 +2,7 @@ import express from "express";
 import { getQuests, getUserInfo, getUserLevel } from "./notion";
 
 const app = express();
-const port = 8080;
+const port = 9000;
 
 app.use(express.static("public"));
 app.use(

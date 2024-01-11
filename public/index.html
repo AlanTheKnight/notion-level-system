@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Notion Level</title>
     <style>
       :root {
         font-family: Arial, Helvetica, sans-serif;
@@ -120,26 +120,31 @@
       </div>
     </div>
     <script>
-      fetch("/user-info")
-        .then((res) => res.json())
-        .then((data) => {
-          document.getElementById("username").innerText = data.name;
-          document.getElementById("avatar").src = data.avatar;
+      const fetchUserLevel = () => {
+        fetch("/user-info")
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("username").innerText = data.name;
+            document.getElementById("avatar").src = data.avatar;
 
-          const progressBarFiller =
-            document.getElementById("progressBarFiller");
-          const lvlProgress = (data.level.cur / data.level.max) * 100;
-          progressBarFiller.style.width = `${lvlProgress}%`;
+            const progressBarFiller =
+              document.getElementById("progressBarFiller");
+            const lvlProgress = (data.level.cur / data.level.max) * 100;
+            progressBarFiller.style.width = `${lvlProgress}%`;
 
-          document.getElementById("xpAvailable").innerText =
-            data.level.totalXP - data.level.XP;
-          document.getElementById(
-            "level"
-          ).innerText = `Level ${data.level.lvl}`;
-          document.getElementById(
-            "curLevel"
-          ).innerText = `${data.level.cur} / ${data.level.max}`;
-        });
+            document.getElementById("xpAvailable").innerText =
+              data.level.totalXP - data.level.XP;
+            document.getElementById(
+              "level"
+            ).innerText = `Level ${data.level.lvl}`;
+            document.getElementById(
+              "curLevel"
+            ).innerText = `${data.level.cur} / ${data.level.max}`;
+          });
+      };
+
+      fetchUserLevel();
+      setInterval(fetchUserLevel, 30 * 1000);
     </script>
   </body>
 </html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #1b1b1b;
+        color: #fff;
+      }
+
+      #userCard {
+        width: 500px;
+        min-height: 150px;
+        border: 1px solid #464646;
+        border-radius: 5px;
+        padding: 1.5rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+      }
+
+      #avatarWrapper {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 1.5rem;
+      }
+
+      #avatar {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      #userInfoWrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex-grow: 1;
+      }
+
+      #username {
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
+      #levelInfoWrapper {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        margin-bottom: 0.7rem;
+      }
+
+      #progressBar {
+        width: 100%;
+        height: 20px;
+        background-color: #464646;
+        border-radius: 5px;
+        margin-right: 0.5rem;
+      }
+
+      #progressBarFiller {
+        height: 100%;
+        background-color: #00ff00;
+        border-radius: 5px;
+      }
+
+      #userInfoTop {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 0.7rem;
+      }
+
+      #level {
+        font-weight: bold;
+      }
+
+      #curLevel {
+        font-size: 0.8rem;
+        color: #a0a0a0;
+        white-space: nowrap;
+      }
+
+      #xpAvailableWrapper {
+        color: #a0a0a0;
+        white-space: nowrap;
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="userCard">
+      <div id="avatarWrapper">
+        <img src="" alt="" id="avatar" />
+      </div>
+      <div id="userInfoWrapper">
+        <div id="userInfoTop">
+          <div id="username"></div>
+          <div id="level"></div>
+        </div>
+        <div id="levelInfoWrapper">
+          <div id="progressBar">
+            <div id="progressBarFiller"></div>
+          </div>
+          <div id="curLevel"></div>
+        </div>
+        <div id="xpAvailableWrapper">
+          Available: <span id="xpAvailable"></span>
+        </div>
+      </div>
+    </div>
+    <script>
+      fetch("/user-info")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("username").innerText = data.name;
+          document.getElementById("avatar").src = data.avatar;
+
+          const progressBarFiller =
+            document.getElementById("progressBarFiller");
+          const lvlProgress = (data.level.cur / data.level.max) * 100;
+          progressBarFiller.style.width = `${lvlProgress}%`;
+
+          document.getElementById("xpAvailable").innerText =
+            data.level.totalXP - data.level.XP;
+          document.getElementById(
+            "level"
+          ).innerText = `Level ${data.level.lvl}`;
+          document.getElementById(
+            "curLevel"
+          ).innerText = `${data.level.cur} / ${data.level.max}`;
+        });
+    </script>
+  </body>
+</html>

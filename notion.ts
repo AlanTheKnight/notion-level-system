@@ -53,7 +53,7 @@ export const getUserLevel = async () => {
   let i = 0;
   let lvl = 1;
   while (XP > 0) {
-    let curLvlXP = startXP * Math.round(Math.pow(1.15, i));
+    let curLvlXP = Math.round(startXP * Math.pow(1.2, i));
     if (XP_counter < curLvlXP) {
       return {
         lvl,

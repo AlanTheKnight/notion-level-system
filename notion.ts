@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { dayDiff } from "./date_utils";
 
 const notion = new Client({
   auth: process.env.NOTION_API_TOKEN,
@@ -17,20 +18,28 @@ export const getQuests = async () => {
       title: page.properties.Title.title[0].text.content,
       status: page.properties.Status.status.name,
       xp: page.properties.XP.number,
-      date: page.properties.Date.date.start,
+      date: new Date(page.properties.Date.date.start),
+      punish: page.properties.Punish.number,
     };
   });
 };
 
 export const getUserXP = async () => {
   const quests = await getQuests();
+  let failedQuests = 0,
+    failedXP = 0;
   let XP = 0,
     totalXP = 0;
   quests.forEach((quest) => {
     if (quest.status === "Done") XP += quest.xp;
+    if (quest.status === "Failed" || dayDiff(quest.date) >= 1) {
+      XP -= quest.punish;
+      failedQuests++;
+      failedXP += quest.punish;
+    }
     totalXP += quest.xp;
   });
-  return { XP, totalXP };
+  return { XP: Math.max(XP, 0), totalXP, failedQuests, failedXP };
 };
 
 export const getUserInfo = async () => {
@@ -47,7 +56,7 @@ export const getUserInfo = async () => {
 export const getUserLevel = async () => {
   const startXP = 10;
 
-  const { XP, totalXP } = await getUserXP();
+  const { XP, totalXP, failedQuests, failedXP } = await getUserXP();
   let XP_counter = XP;
 
   let i = 0;
@@ -61,6 +70,8 @@ export const getUserLevel = async () => {
         totalXP,
         cur: XP_counter,
         max: curLvlXP,
+        failedQuests,
+        failedXP,
       };
     }
     XP_counter -= curLvlXP;

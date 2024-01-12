@@ -96,6 +96,13 @@
         color: #a0a0a0;
         white-space: nowrap;
         font-size: 0.8rem;
+        margin-bottom: 0.4rem;
+      }
+
+      #failedInfo {
+        color: #a0a0a0;
+        white-space: nowrap;
+        font-size: 0.8rem;
       }
     </style>
   </head>
@@ -116,7 +123,11 @@
           <div id="curLevel"></div>
         </div>
         <div id="xpAvailableWrapper">
-          Available: <span id="xpAvailable"></span>
+          Available: <span id="xpAvailable"></span> XP
+        </div>
+        <div id="failedInfo">
+          Failed: <span id="failedQuests"></span> for
+          <span id="failedXP"></span> XP
         </div>
       </div>
     </div>
@@ -141,6 +152,17 @@
             document.getElementById(
               "curLevel"
             ).innerText = `${data.level.cur} / ${data.level.max}`;
+            document.getElementById("failedQuests").innerText = `${
+              data.level.failedQuests
+            } ${data.level.failedQuests > 1 ? "quests" : "quest"}`;
+            document.getElementById(
+              "failedXP"
+            ).innerText = `${data.level.failedXP}`;
+            if (failedQuests === 0) {
+              document.getElementById("failedInfo").style.display = "none";
+            } else {
+              document.getElementById("failedInfo").style.display = "block";
+            }
           });
       };
 

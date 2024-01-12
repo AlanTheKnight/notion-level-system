@@ -27,12 +27,13 @@ export const getQuests = async () => {
 export const getUserXP = async () => {
   const quests = await getQuests();
   let failedQuests = 0,
-    failedXP = 0;
-  let XP = 0,
+    failedXP = 0,
+    XP = 0,
     totalXP = 0;
   quests.forEach((quest) => {
-    if (quest.status === "Done") XP += quest.xp;
-    if (quest.status === "Failed" || dayDiff(quest.date) >= 1) {
+    if (quest.status === "Done") {
+      XP += quest.xp;
+    } else if (quest.status === "Failed") {
       XP -= quest.punish;
       failedQuests++;
       failedXP += quest.punish;

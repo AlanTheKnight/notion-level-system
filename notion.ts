@@ -45,11 +45,12 @@ export const getUserXP = async () => {
 export const getUserInfo = async () => {
   const response = await notion.users.list({});
   const user = response.results.filter((u) => u.type === "person")[0];
+  const level = await getUserLevel();
 
   return {
     name: user.name,
     avatar: user.avatar_url,
-    level: await getUserLevel(),
+    level,
   };
 };
 

@@ -158,7 +158,7 @@
             document.getElementById(
               "failedXP"
             ).innerText = `${data.level.failedXP}`;
-            if (failedQuests === 0) {
+            if (data.level.failedQuests === 0) {
               document.getElementById("failedInfo").style.display = "none";
             } else {
               document.getElementById("failedInfo").style.display = "block";
